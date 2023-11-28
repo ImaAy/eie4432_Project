@@ -38,7 +38,7 @@ app.use('/event', event);
 app.use('/seats', seat);
 
 app.use('/', express.static(path.join(process.cwd(), '/static')));
-app.use('/upload', express.static('upload/Images'));
+app.use('/upload', express.static(path.join(process.cwd(), 'upload/Images')));
 
 const PORT = 8080;
 
