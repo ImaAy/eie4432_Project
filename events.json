@@ -1,0 +1,102 @@
+[
+  {
+    "title": "New York to London Flight",
+    "flightNumber": "NYL123",
+    "flightPrice": "1000",
+    "nbTickets": "40",
+    "avTickets": 40,
+    "departureDateTime": "2023-12-15T07:30:00",
+    "arrivalDateTime": "2023-12-15T19:45:00",
+    "departureAirport": "John F. Kennedy International Airport, New York",
+    "arrivalAirport": "Heathrow Airport, London",
+    "airline": "AirWorld Airlines",
+    "description": "Direct flight from New York to London. Enjoy complimentary meals and in-flight entertainment.",
+    "coverImage": "/upload/pdpLondon.png"
+  },
+  {
+    "title": "San Francisco to Tokyo Flight",
+    "flightNumber": "SFT456",
+    "flightPrice": "4000",
+    "nbTickets": "40",
+    "avTickets": 40,
+    "departureDateTime": "2023-12-20T11:00:00",
+    "arrivalDateTime": "2023-12-21T15:00:00",
+    "departureAirport": "San Francisco International Airport",
+    "arrivalAirport": "Narita International Airport, Tokyo",
+    "airline": "Pacific Air",
+    "description": "Experience the beauty of Tokyo with our comfortable and convenient flights from San Francisco.",
+    "coverImage": "/upload/pdpTokyo.png"
+  },
+  {
+    "title": "Paris to Dubai Flight",
+    "flightNumber": "PD789",
+    "flightPrice": "1500",
+    "nbTickets": "10",
+    "avTickets": 10,
+    "departureDateTime": "2023-12-18T21:00:00",
+    "arrivalDateTime": "2023-12-19T05:50:00",
+    "departureAirport": "Charles de Gaulle Airport, Paris",
+    "arrivalAirport": "Dubai International Airport",
+    "airline": "Global Skyways",
+    "description": "Fly from Paris to Dubai on our luxury aircraft. Premium services include spacious seating and gourmet dining.",
+    "coverImage": "/upload/pdpDubai.png"
+  },
+
+  {
+    "title": "Hong Kong to Paris Flight",
+    "flightNumber": "HKP001",
+    "flightPrice": "750",
+    "nbTickets": "5",
+    "avTickets": 5,
+    "departureDateTime": "2023-12-10T23:00:00",
+    "arrivalDateTime": "2023-12-11T05:45:00",
+    "departureAirport": "Hong Kong International Airport",
+    "arrivalAirport": "Charles de Gaulle Airport, Paris",
+    "airline": "AirEast",
+    "description": "Direct flight from the bustling city of Hong Kong to the romantic capital of France, Paris. Enjoy our world-class service and amenities.",
+    "coverImage": "/upload/pdpParis.png"
+  },
+  {
+    "title": "Hong Kong to Los Angeles Flight",
+    "flightNumber": "HKLAX88",
+    "flightPrice": "800",
+    "nbTickets": "3",
+    "avTickets": 3,
+    "departureDateTime": "2023-12-12T10:00:00",
+    "arrivalDateTime": "2023-12-12T20:30:00",
+    "departureAirport": "Hong Kong International Airport",
+    "arrivalAirport": "Los Angeles International Airport",
+    "airline": "Pacific Airlines",
+    "description": "Experience the comfort of our long-haul service from Hong Kong to Los Angeles. We provide entertainment and a menu inspired by both cultures.",
+    "coverImage": "/upload/pdpLA.png"
+  },
+
+  {
+    "title": "Rio de Janeiro to Miami Flight",
+    "flightNumber": "RJM878",
+    "flightPrice": "850",
+    "nbTickets": "6",
+    "avTickets": 6,
+    "departureDateTime": "2023-12-30T17:00:00",
+    "arrivalDateTime": "2023-12-30T22:00:00",
+    "departureAirport": "Rio de Janeiro-Galeão International Airport",
+    "arrivalAirport": "Miami International Airport",
+    "airline": "Atlantic Air",
+    "description": "Connect from the vibrant city of Rio de Janeiro to the sunny beaches of Miami with our direct flights.",
+    "coverImage": "/upload/pdpMiami.png"
+  },
+  {
+    "title": "Berlin to Cape Town Flight",
+    "flightNumber": "BCT982",
+    "flightPrice": "980",
+    "nbTickets": "4",
+    "avTickets": 4,
+    "departureDateTime": "2023-12-25T13:45:00",
+    "arrivalDateTime": "2023-12-26T07:20:00",
+    "departureAirport": "Berlin Brandenburg Airport",
+    "arrivalAirport": "Cape Town International Airport",
+    "airline": "EuroWings",
+    "description": "Embark on an adventure from Berlin to the heart of South Africa. Premium comfort meets exceptional service.",
+    "coverImage": "/upload/pdpCapTown.png"
+  }
+]

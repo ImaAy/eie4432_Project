@@ -1,0 +1,139 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Air World- Sign up</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous" />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"></script>
+
+    <script src="js/register.js"></script>
+    <script src="js/autologout.js"></script>
+    <script src="js/navbar.js"></script>
+
+    <style>
+      body {
+        background-image: url(/upload/fond.webp);
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+      }
+
+      .registration-form {
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      }
+
+      .navbar-custom {
+        background-color: rgba(1, 3, 23, 255);
+      }
+      .navbar-custom .navbar-nav .nav-link {
+        color: white;
+      }
+      .navbar-custom .navbar-nav .nav-link:hover {
+        color: rgb(211, 211, 211);
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-custom">
+      <a class="navbar-brand" href="index.html">
+        <img src="/upload/logo.png" alt="Logo" style="height: 60px" />
+        <span class="font-weight-bold text-white" style="font-size: 1.5rem">Air World</span>
+      </a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" href="index.html">Login</a></li>
+        </ul>
+      </div>
+    </nav>
+    <div class="container mt-5 d-flex align-items-center min-vh-100">
+      <div class="col-12">
+        <div class="registration-form p-4 fs-4 d-flex flex-column" style="min-height: 100%">
+          <h2 class="text-center">Sign Up</h2>
+          <form action="/auth/register" method="post" enctype="multipart/form-data">
+            <div class="form-group mb-3">
+              <label for="profileImage">Import Profile Image:</label>
+              <input type="file" class="form-control" id="profileImage" name="profileImage" />
+            </div>
+            <div class="form-group mb-3">
+              <label for="userID">User ID:</label>
+              <input type="text" class="form-control" id="userID" placeholder="Enter User ID" name="userID" required />
+            </div>
+            <div class="form-group mb-3">
+              <label for="password">Password:</label>
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                placeholder="Enter Password"
+                name="password"
+                required />
+            </div>
+            <div class="form-group mb-3">
+              <label for="repeat-password">Repeat your Password:</label><br />
+              <input type="password" class="form-control" id="repeat-password" name="repeat-password" />
+            </div>
+            <div class="form-group mb-3">
+              <label for="nickname">Nickname:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="nickname"
+                placeholder="Enter Nickname"
+                name="nickname"
+                required />
+            </div>
+            <div class="form-group mb-3">
+              <label for="email">Email:</label>
+              <input type="email" class="form-control" id="email" placeholder="Enter Email" name="email" required />
+            </div>
+            <div class="form-group mb-3">
+              <label>Gender:</label>
+              <div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="gender" id="male" value="male" required />
+                  <label class="form-check-label" for="male">Male</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="gender" id="female" value="female" required />
+                  <label class="form-check-label" for="female">Female</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="gender" id="other" value="other" required />
+                  <label class="form-check-label" for="other">Other</label>
+                </div>
+              </div>
+            </div>
+            <div class="form-group mb-3">
+              <label for="birthdate">Birthdate:</label>
+              <input type="date" class="form-control" id="birthdate" name="birthdate" required />
+            </div>
+            <button type="submit" class="btn btn-primary w-100" id="registerButton">Register</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

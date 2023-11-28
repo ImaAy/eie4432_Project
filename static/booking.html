@@ -1,0 +1,302 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Air World - Booking</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous" />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"></script>
+
+    <script src="js/booking.js"></script>
+    <script src="js/autologout.js"></script>
+    <script src="js/navbar.js"></script>
+
+    <style>
+      body {
+        background-image: url(/upload/fond.webp);
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+      }
+
+      .seat {
+        cursor: pointer;
+        fill: #4caf50; /* Vert pour disponible */
+      }
+      .occupied {
+        fill: #f44336; /* Rouge pour occupé */
+      }
+      .premium {
+        fill: #3f51b5; /* Bleu pour premium */
+      }
+      .seat text {
+        fill: white;
+        font-size: 10px;
+        text-anchor: middle;
+      }
+
+      .registration-form {
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      }
+      .seat.selected rect {
+        fill: gold; /* Couleur de fond pour le siège sélectionné */
+        stroke: black; /* Contour optionnel pour le rendre plus visible */
+        stroke-width: 2; /* Épaisseur du contour */
+      }
+
+      .seat.selected text {
+        fill: black; /* Couleur du texte pour le siège sélectionné */
+      }
+
+      .navbar-custom {
+        background-color: rgba(1, 3, 23, 255);
+      }
+      .navbar-custom {
+        background-color: rgba(1, 3, 23, 255);
+      }
+      .navbar-custom .navbar-nav .nav-link {
+        color: white;
+      }
+      .navbar-custom .navbar-nav .nav-link:hover {
+        color: rgb(211, 211, 211);
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-custom">
+      <a class="navbar-brand" href="dashboard.html">
+        <img src="/upload/logo.png" alt="Logo" style="height: 60px" />
+        <span class="font-weight-bold text-white" style="font-size: 1.5rem">Air World</span>
+      </a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" href="dashboard.html">Home</a></li>
+          <li class="nav-item" data-role="user" style="display: none">
+            <a class="nav-link" href="profilPage.html">Profile Page</a>
+          </li>
+          <li class="nav-item" data-role="admin" style="display: none" ;>
+            <a class="nav-link" href="eventManag.html">Event Management</a>
+          </li>
+          <li class="nav-item" data-role="admin" style="display: none" ;>
+            <a class="nav-link" href="seatManag.html">Seat Management</a>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="#" id="logoutLink">Log Out</a></li>
+        </ul>
+      </div>
+    </nav>
+    <div id="eventDetails" class="container">
+      <div class="card">
+        <img class="card-img-top" id="eventImage" src="" alt="Image de l'événement" />
+        <div class="card-body">
+          <h5 class="card-title" id="eventTitle"></h5>
+          <p class="card-text" id="eventDescription"></p>
+          <p class="card-text"><strong>Flight Price:</strong> <span id="eventPrice"></span></p>
+          <p class="card-text"><strong>Airline:</strong> <span id="eventAirline"></span></p>
+          <p class="card-text">
+            <strong>Departure:</strong> <span id="eventDepartureDate"></span> from
+            <span id="eventDepartureAirport"></span>
+          </p>
+          <p class="card-text">
+            <strong>Arrival:</strong> <span id="eventArrivalDate"></span> at <span id="eventArrivalAirport"></span>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="container mt-5 d-flex align-items-center min-vh-100">
+      <div class="col-12">
+        <div class="registration-form p-4 fs-4 d-flex flex-column" style="min-height: 100%">
+          <h2>Contact Information</h2>
+          <form id="contactForm">
+            <div class="row">
+              <div class="col">
+                <div class="form-group mb-3">
+                  <label for="lastName">Last Name: </label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="lastName"
+                    placeholder="Enter Last Name"
+                    name="lastName"
+                    required />
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-group mb-3">
+                  <label for="firstName">First Name:</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="firstName"
+                    placeholder="Enter First Name"
+                    name="firstName"
+                    required />
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div class="form-group mb-3">
+                  <label for="email">Email:</label>
+                  <input type="email" class="form-control" id="email" placeholder="Enter Email" name="email" required />
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-group mb-3">
+                  <label for="gender">Gender:</label>
+                  <select class="form-control" id="gender" name="gender" required>
+                    <option value="">Select Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div class="form-group mb-3">
+                  <label for="dob">Date of Birth:</label>
+                  <input type="date" class="form-control" id="dob" name="dob" required />
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-group mb-3">
+                  <label for="travelDocumentCountry">Travel Document (Country):</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="travelDocumentCountry"
+                    name="travelDocumentCountry"
+                    required />
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <div class="form-group mb-3">
+                  <label for="nationality">Nationality:</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="nationality"
+                    placeholder="Enter your Nationality"
+                    name="nationality"
+                    required />
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-group mb-3">
+                  <label for="travelDocumentNumber">Travel Document Number:</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="travelDocumentNumber"
+                    placeholder="Enter Document Number"
+                    name="travelDocumentNumber"
+                    required />
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div class="form-group mb-3">
+                  <label for="phoneNumber">Phone Number:</label>
+                  <input
+                    type="tel"
+                    class="form-control"
+                    id="phoneNumber"
+                    placeholder="Enter Phone Number"
+                    name="phoneNumber"
+                    required />
+                </div>
+              </div>
+            </div>
+            <h3>Choose yor seat</h3>
+            <!-- Cadre de la légende pour la carte des sièges SVG avec Bootstrap -->
+            <div class="card my-3">
+              <div class="card-body">
+                <h5 class="card-title">Seat Legend</h5>
+                <div class="d-flex justify-content-start flex-wrap">
+                  <div class="legend-item d-flex align-items-center me-3 mb-2">
+                    <span
+                      class="seat-color-box"
+                      style="
+                        background-color: green;
+                        width: 20px;
+                        height: 20px;
+                        display: inline-block;
+                        margin-right: 10px;
+                      "></span>
+                    <span class="text-muted">Available - $50</span>
+                  </div>
+                  <div class="legend-item d-flex align-items-center me-3 mb-2">
+                    <span
+                      class="seat-color-box"
+                      style="
+                        background-color: blue;
+                        width: 20px;
+                        height: 20px;
+                        display: inline-block;
+                        margin-right: 10px;
+                      "></span>
+                    <span class="text-muted">Premium - $100</span>
+                  </div>
+                  <div class="legend-item d-flex align-items-center me-3 mb-2">
+                    <span
+                      class="seat-color-box"
+                      style="
+                        background-color: red;
+                        width: 20px;
+                        height: 20px;
+                        display: inline-block;
+                        margin-right: 10px;
+                      "></span>
+                    <span class="text-muted">Occupied - N/A</span>
+                  </div>
+                  <div class="legend-item d-flex align-items-center me-3 mb-2">
+                    <span
+                      class="seat-color-box"
+                      style="
+                        background-color: yellow;
+                        width: 20px;
+                        height: 20px;
+                        display: inline-block;
+                        margin-right: 10px;
+                      "></span>
+                    <span class="text-muted">Selected</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <svg id="seatMap" width="600" height="600" style="display: block; margin: auto"></svg>
+            <div id="priceDisplay">Total Price: <span id="flightPrice"> </span> HKD</div>
+            <button type="button" id="submitBooking" class="btn btn-primary">Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
