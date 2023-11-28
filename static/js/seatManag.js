@@ -100,11 +100,25 @@ function attachEventListeners() {
           return response.json();
         })
         .then((data) => {
-          let userInfo = data.reservedBy ? `<br>Reserved by: ${data.reservedBy}` : '<br>Not reserved';
-          tooltip.innerHTML = `Seat: ${data.seatNumber}<br>Occupied: ${data.isOccupied}<br>Class: ${data.class}${userInfo}`;
-          tooltip.style.display = 'block';
-          tooltip.style.left = event.pageX + 'px';
-          tooltip.style.top = event.pageY + 'px';
+          if (data.reservedBy) {
+              return fetch(`/auth/user-info/${data.reservedBy}`).then(userResponse => {
+                  if (!userResponse.ok) {
+                      throw new Error('Network response was not ok');
+                  }
+                  return userResponse.json().then(userInfo => {
+                      return { seatData: data, userData: userInfo };
+                  });
+              });
+          } else {
+              return { seatData: data };
+          }
+        })
+        .then(({ seatData, userData }) => {
+            let userInfoHtml = userData ? `<br>Reserved by: ${userData.username} <br>Email:(${userData.email}) <br>Gender: (${userData.gender}) ` : '<br>Not reserved';
+            tooltip.innerHTML = `Seat: ${seatData.seatNumber}<br>Occupied: ${seatData.isOccupied}<br>Class: ${seatData.class}${userInfoHtml}`;
+            tooltip.style.display = 'block';
+            tooltip.style.left = event.pageX + 'px';
+            tooltip.style.top = event.pageY + 'px';
         })
         .catch((error) => console.error('Error fetching seat information:', error));
     });

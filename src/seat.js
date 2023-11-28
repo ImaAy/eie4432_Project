@@ -31,8 +31,7 @@ route.get('/seat-info/:seatNum', async (req, res) => {
 route.post('/updateStatut', upload.array(), async (req, res) => {
   try {
     const { selectedSeat } = req.body;
-    const user = req.session.username;
-    console.log(selectedSeat, user);
+    const user = req.session.userId;
     const success = await update_statut(selectedSeat, user);
     res.json({ success });
   } catch (error) {

@@ -1,8 +1,9 @@
 var eventTitle;
+var eventId;
 var totalPrice;
 var selectedSeat;
 document.addEventListener('DOMContentLoaded', function () {
-  var eventId = sessionStorage.getItem('eventId');
+  eventId = sessionStorage.getItem('eventId');
   totalPrice = sessionStorage.getItem('totalPrice');
   selectedSeat = sessionStorage.getItem('selectedSeat');
   console.log('seatSession  ', selectedSeat);
@@ -41,7 +42,6 @@ document.addEventListener('DOMContentLoaded', function () {
       body: formData,
     })
       .then((response) => {
-        console.log('seattttt');
         if (response.ok) {
           return response.json();
         } else {
@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function () {
     updateAvTickets(eventId);
     setTimeout(function () {
       window.location.href = 'dashboard.html';
-    }, 10000);
+    }, 30000);
   });
 });
 
@@ -96,10 +96,16 @@ function updateAvTickets(eventId) {
     .catch((error) => console.error('Error:', error));
 }
 
+
+
+
 function displayElectronicTicket() {
   document.getElementById('info').style.display = 'none';
   const paymentStatusSection = document.getElementById('payment-status');
-
+  const ticketNumber = Math.floor(Math.random() * 1000000);
+  const currentDate = new Date();
+  const formattedDate = currentDate.toISOString().split('T')[0]; // Format YYYY-MM-DD
+  const formattedTime = currentDate.toTimeString().split(' ')[0]; // Format HH:MM:SS
   paymentStatusSection.innerHTML = `
     <div class="card border-success mb-3">
       <div class="card-header bg-success text-white">Payment Status</div>
@@ -116,13 +122,48 @@ function displayElectronicTicket() {
       <div class="card-header">Electronic Ticket</div>
       <div class="card-body">
         <h5 class="card-title">Event: ${eventTitle}</h5>
-        <p class="card-text"><strong>Ticket Number:</strong> #${Math.floor(Math.random() * 1000000)}</p>
+        <p class="card-text"><strong>Ticket Number:</strong> #${ticketNumber}</p>
         <p class="card-text"><strong>Price:</strong> ${totalPrice}</p>
-        <p class="card-text"><strong>Date:</strong> 2023-12-01</p>
+        <p class="card-text"><strong>Date:</strong> ${formattedDate}</p>
+        <p class="card-text"><strong>Time:</strong> ${formattedTime}</p>
         <p class="card-text"><strong>Seat: ${selectedSeat}</strong> </p>
         <p class="card-text">Thank you for your purchase! You will be automatically redirected to the menu in 30 seconds.</p>
       </div>
     </div>
   `;
   ticketSection.style.display = 'block';
+  const ticketData = {
+    eventId: eventId,
+    eventTitle: eventTitle,
+    ticketNumber: ticketNumber,
+    totalPrice: totalPrice,
+    date: formattedDate,
+    hour: formattedTime,
+    seatNumber: selectedSeat
+  };
+
+  saveTicketToDatabase(ticketData);
+}
+
+function saveTicketToDatabase(ticketData) {
+  console.log("rrrr", ticketData);
+  fetch('/auth/add-ticket', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(ticketData)
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  })
+  .then(data => {
+    console.log('Ticket saved successfully', data);
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
 }

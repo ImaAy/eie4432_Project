@@ -67,7 +67,6 @@ async function get_seatInfo(seatNum) {
 async function update_statut(seatId, user) {
   try {
     const seats = client.db('bookingFlight').collection('seats');
-    console.log('seat back', user);
     const filter = { seatNumber: seatId };
     const update = { $set: { isOccupied: true, reservedBy: user } };
     const result = await seats.updateOne(filter, update);

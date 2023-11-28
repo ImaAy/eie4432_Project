@@ -1,6 +1,7 @@
 import fs from 'fs/promises';
 import client from './dbclient.js';
 import bcrypt from 'bcrypt';
+import { ObjectId } from 'mongodb';
 const saltRounds = 10;
 async function init_db() {
   try {
@@ -47,11 +48,11 @@ async function validate_user(username, password) {
   }
 }
 
-async function update_user(username, password, role, gender, birthdate, email, profileImage, nickname) {
+async function update_user(userId, password, role, gender, birthdate, email, profileImage, nickname) {
   try {
     const users = client.db('bookingFlight').collection('users');
 
-    const filter = { username };
+    const filter = { userId };
     const update = {
       $set: { password, role, gender, birthdate, email, profileImage, nickname },
     };
@@ -71,10 +72,10 @@ async function update_user(username, password, role, gender, birthdate, email, p
   }
 }
 
-async function update_profile(username, nickname, email, gender, birthdate) {
+async function update_profile(userId, nickname, email, gender, birthdate) {
   try {
     const users = client.db('bookingFlight').collection('users');
-    const filter = { username };
+    const filter = { userId };
     const update = {
       $set: {
         nickname: nickname,
@@ -99,11 +100,11 @@ async function update_profile(username, nickname, email, gender, birthdate) {
   }
 }
 
-async function update_image(username, profileImage) {
+async function update_image(userId, profileImage) {
   try {
     const users = client.db('bookingFlight').collection('users');
 
-    const filter = { username };
+    const filter = { userId };
     const update = {
       $set: { profileImage: profileImage },
     };
@@ -147,10 +148,12 @@ async function update_password(username, oldPassword, newPassword) {
   }
 }
 
-async function fetch_user(username) {
+async function fetch_user(userId) {
   try {
     const users = client.db('bookingFlight').collection('users');
-    const user = await users.findOne({ username: username });
+    console.log("fetch user ", userId);
+    const user = await users.findOne({ _id: new ObjectId(userId) });
+    console.log("user", user);
     return user;
   } catch (error) {
     console.error('Unable to fetch from database!', error.message);
@@ -158,9 +161,59 @@ async function fetch_user(username) {
   }
 }
 
+async function fetch_userName(username) {
+  try {
+    const users = client.db('bookingFlight').collection('users');
+    const user = await users.findOne({ username: username });
+    console.log("userrrrrr", user);
+    return user;
+  } catch (error) {
+    console.error('Unable to fetch from database!', error.message);
+    throw error;
+  }
+}
+
+async function add_event(userId, eventId) {
+    try {
+        const users = client.db('bookingFlight').collection('users');
+        
+        const updateResult = await users.updateOne(
+            { _id: new ObjectId(userId) },
+            { $addToSet: { events: eventId } }
+        );
+
+        console.log("Résultat de l'update:", updateResult);
+
+        return updateResult.modifiedCount > 0;
+    } catch (error) {
+        console.error('Erreur lors de la réservation de l\'événement:', error);
+        return false;
+    }
+}
+
+async function add_ticket(userId, ticketData) {
+    try {
+        console.log("ticketData", ticketData);
+        const users = client.db('bookingFlight').collection('users');
+        
+        const updateResult = await users.updateOne(
+            { _id: new ObjectId(userId) },
+            { $push: { tickets: ticketData } }
+        );
+
+        console.log("updatta", updateResult);
+        
+        return updateResult.modifiedCount > 0;
+    } catch (error) {
+        console.error('Erreur lors de l\'ajout du ticket:', error);
+        return false;
+    }
+}
+
+
 async function username_exist(username) {
   try {
-    const user = await fetch_user(username);
+    const user = await fetch_userName(username);
 
     return !!user;
   } catch (error) {
@@ -168,6 +221,7 @@ async function username_exist(username) {
     return false;
   }
 }
+
 init_db().catch(console.dir);
 
-export { validate_user, update_user, fetch_user, username_exist, update_profile, update_image, update_password };
+export { validate_user, update_user, fetch_user, username_exist, update_profile, update_image, update_password,add_event, add_ticket};

@@ -2,6 +2,7 @@ import express from 'express';
 import multer from 'multer';
 import bcrypt from 'bcrypt';
 
+
 import {
   validate_user,
   update_user,
@@ -10,9 +11,12 @@ import {
   update_profile,
   update_image,
   update_password,
+  add_event,
+  add_ticket,
 } from './userdb.js';
 
 const route = express.Router();
+route.use(express.json())
 const form = multer();
 const storage = multer.diskStorage({
   destination: './upload/Images',
@@ -106,7 +110,7 @@ route.post('/login', form.none(), async (req, res) => {
 
     if (user) {
       req.session.logged = true;
-      req.session.username = user.username;
+      req.session.userId = user._id;
       res.json({
         status: 'success',
         user: {
@@ -131,8 +135,8 @@ route.post('/login', form.none(), async (req, res) => {
 route.get('/me', async (req, res) => {
   try {
     if (req.session && req.session.logged) {
-      const username = req.session.username;
-      const user = await fetch_user(username);
+      const userId = req.session.userId;
+      const user = await fetch_user(userId);
       if (user) {
         res.json(user);
       } else {
@@ -152,11 +156,47 @@ route.get('/me', async (req, res) => {
   }
 });
 
+route.get('/user-info/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const user = await fetch_user(userId);
+        if (!user) {
+            return res.status(404).send('Utilisateur non trouvé');
+        }
+        res.json(user);
+    } catch (error) {
+        res.status(500).send('Erreur serveur');
+    }
+});
+
+route.post('/addEvent/:eventId', async (req, res) => {
+    try {
+        const userId = req.session.userId;
+        const { eventId } = req.params;
+        const { totalPrice, seatNumber } = req.body;
+
+        console.log("Adding event", userId, eventId);
+
+        const success = await add_event(userId, eventId,totalPrice);
+
+        if (success) {
+            res.json({ success: true, eventId });
+        } else {
+            res.status(500).send('Impossible d\'ajouter l\'événement');
+        }
+    } catch (error) {
+        console.error('Erreur serveur:', error);
+        res.status(500).send('Erreur serveur');
+    }
+});
+
+
+
 route.post('/updateProfile', upload.array(), async (req, res) => {
   try {
     const { nickname, email, gender, birthdate } = req.body;
     console.log('update', nickname, email, gender, birthdate);
-    const success = await update_profile(req.session.username, nickname, email, gender, birthdate);
+    const success = await update_profile(req.session.userId, nickname, email, gender, birthdate);
     res.json(success);
   } catch (error) {
     console.error('Unable to fetch events:', error.message);
@@ -169,14 +209,14 @@ route.post('/uploadProfileImage', upload.single('profileImage'), async (req, res
     return res.status(400).json({ error: 'Aucune image sélectionnée' });
   }
   const profileImage = `/upload/${req.file.filename}`;
-  const success = await update_image(req.session.username, profileImage);
+  const success = await update_image(req.session.userId, profileImage);
 
   res.json({ profileImage, status: 'success', message: 'Success for the upload of the image' });
 });
 
 route.post('/changePassword', upload.array(), async (req, res) => {
   try {
-    const user = req.session.username;
+    const user = req.session.userId;
     const { oldPassword, newPassword } = req.body;
 
     const success = await update_password(user, oldPassword, newPassword);
@@ -200,6 +240,24 @@ route.post('/logout', async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });
   }
+});
+
+route.post('/add-ticket', async (req, res) => {
+    try {
+        const ticketData = req.body;
+        const userId = req.session.userId;
+        console.log("tickkee", ticketData);
+        const ticketAdded = await add_ticket(userId, ticketData);
+
+        if (ticketAdded) {
+            res.status(200).json({ message: 'Ticket enregistré avec succès' });
+        } else {
+            res.status(400).send('Échec de l\'enregistrement du ticket');
+        }
+    } catch (error) {
+        console.error('Erreur serveur:', error);
+        res.status(500).send('Erreur serveur');
+    }
 });
 
 export default route;
