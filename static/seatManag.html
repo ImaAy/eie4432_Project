@@ -54,7 +54,7 @@
       }
       .seat text {
         fill: white;
-        font-size: 10px;
+        font-size: 5px;
         text-anchor: middle;
       }
     </style>
@@ -66,14 +66,8 @@
         <img src="/upload/logo.png" alt="Logo" style="height: 60px" />
         <span class="font-weight-bold text-white" style="font-size: 1.5rem">Air World</span>
       </a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarNav"
-        aria-controls="navbarNav"
-        aria-expanded="false"
-        aria-label="Toggle navigation">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
@@ -98,13 +92,10 @@
           <h1 class="text-center mb-4">Seat Management Page</h1>
         </div>
       </div>
-      <div
-        class="d-flex justify-content-center align-items-center"
-        style="min-height: 100vh; background-color: rgba(255, 255, 255, 0.5)">
-        <svg id="seatMap" width="600" height="800"></svg>
-        <div
-          id="seatInfoTooltip"
-          style="
+      <div class="row">
+        <div class="col-lg-8 col-md-7 col-sm-12 d-flex justify-content-center align-items-center">
+          <svg id="seatMap" class="img-fluid" style="max-width: 100%; height: auto;"></svg>
+          <div id="seatInfoTooltip" style="
             position: absolute;
             display: none;
             background-color: white;
@@ -112,29 +103,22 @@
             padding: 10px;
             z-index: 1000;
           "></div>
-
-        <div
-          class="legend position-absolute"
-          style="
-            right: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: white;
-            border: 1px solid #ddd;
-            padding: 10px;
-          ">
-          <h5>Légende</h5>
-          <div class="d-flex align-items-center mb-2">
-            <div class="bg-success" style="width: 20px; height: 20px"></div>
-            <span class="ml-2">Available</span>
-          </div>
-          <div class="d-flex align-items-center mb-2">
-            <div class="bg-danger" style="width: 20px; height: 20px"></div>
-            <span class="ml-2">Occupied</span>
-          </div>
-          <div class="d-flex align-items-center">
-            <div class="bg-primary" style="width: 20px; height: 20px"></div>
-            <span class="ml-2">Premium</span>
+        </div>
+        <div class="col-lg-4 col-md-5 col-sm-12">
+          <div class="legend bg-white border p-3">
+            <h5>Legend</h5>
+            <div class="d-flex align-items-center mb-2">
+              <div class="bg-success" style="width: 20px; height: 20px"></div>
+              <span class="ms-2">Available</span>
+            </div>
+            <div class="d-flex align-items-center mb-2">
+              <div class="bg-danger" style="width: 20px; height: 20px"></div>
+              <span class="ms-2">Occupied</span>
+            </div>
+            <div class="d-flex align-items-center">
+              <div class="bg-primary" style="width: 20px; height: 20px"></div>
+              <span class="ms-2">Premium</span>
+            </div>
           </div>
         </div>
       </div>
