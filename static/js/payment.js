@@ -1,6 +1,7 @@
 /* Group members : 
     Name : Imadath YAYA studentId: 23012992x
     Name: Kin Fung Yip*/
+    
 var eventTitle;
 var eventId;
 var totalPrice;
