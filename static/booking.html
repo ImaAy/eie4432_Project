@@ -1,3 +1,7 @@
+<!--Group members :
+Name : Imadath YAYA studentId: 23012992x
+Name: Kin Fung Yip*/ -->
+
 <!doctype html>
 <html>
   <head>
@@ -20,12 +24,13 @@
     <script src="js/navbar.js"></script>
 
     <style>
+
       body {
-        background-image: url(/upload/fond.webp);
+        background-image: url(/upload/fond.png);
         background-size: cover;
         background-repeat: no-repeat;
         background-position: center;
-      }
+      }    
 
       .seat {
         cursor: pointer;
@@ -95,6 +100,9 @@
           </li>
           <li class="nav-item" data-role="admin" style="display: none" ;>
             <a class="nav-link" href="seatManag.html">Seat Management</a>
+          </li>
+          <li class="nav-item" data-role="user" style="display: none" ;>
+            <a class="nav-link" href="transactionHist.html">Transaction history</a>
           </li>
           <li class="nav-item"><a class="nav-link" href="#" id="logoutLink">Log Out</a></li>
         </ul>
@@ -286,7 +294,7 @@
               </div>
             </div>
             <svg id="seatMap" width="600" height="600" style="display: block; margin: auto"></svg>
-            <div id="priceDisplay">Total Price: <span id="flightPrice"> </span> HKD</div>
+            <div id="priceDisplay" class =>Total Price: <span id="flightPrice"> </span> HKD</div>
             <button type="button" id="submitBooking" class="btn btn-primary">Submit</button>
           </form>
         </div>

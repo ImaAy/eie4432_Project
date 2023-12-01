@@ -1,3 +1,7 @@
+/* Group members : 
+    Name : Imadath YAYA studentId: 23012992x
+    Name: Kin Fung Yip*/
+
 import { MongoClient, ServerApiVersion } from 'mongodb';
 import config from './config.js';
 const connect_uri = config.CONNECTION_STR;

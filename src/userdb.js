@@ -1,3 +1,7 @@
+/* Group members : 
+    Name : Imadath YAYA studentId: 23012992x
+    Name: Kin Fung Yip*/
+
 import fs from 'fs/promises';
 import client from './dbclient.js';
 import bcrypt from 'bcrypt';
@@ -36,7 +40,7 @@ async function validate_user(username, password) {
 
   try {
     const users = client.db('bookingFlight').collection('users');
-    const user = await users.findOne({ username });
+    const user = await users.findOne({ username:username });
     if (!user) {
       return false;
     }
@@ -48,11 +52,11 @@ async function validate_user(username, password) {
   }
 }
 
-async function update_user(userId, password, role, gender, birthdate, email, profileImage, nickname) {
+async function update_user(username, password, role, gender, birthdate, email, profileImage, nickname) {
   try {
     const users = client.db('bookingFlight').collection('users');
 
-    const filter = { userId };
+    const filter = { username: username };
     const update = {
       $set: { password, role, gender, birthdate, email, profileImage, nickname },
     };
@@ -75,7 +79,7 @@ async function update_user(userId, password, role, gender, birthdate, email, pro
 async function update_profile(userId, nickname, email, gender, birthdate) {
   try {
     const users = client.db('bookingFlight').collection('users');
-    const filter = { userId };
+    const filter = { _id : new ObjectId(userId) };
     const update = {
       $set: {
         nickname: nickname,
@@ -103,8 +107,7 @@ async function update_profile(userId, nickname, email, gender, birthdate) {
 async function update_image(userId, profileImage) {
   try {
     const users = client.db('bookingFlight').collection('users');
-
-    const filter = { userId };
+    const filter = { _id : new ObjectId(userId) };
     const update = {
       $set: { profileImage: profileImage },
     };
@@ -124,10 +127,10 @@ async function update_image(userId, profileImage) {
   }
 }
 
-async function update_password(username, oldPassword, newPassword) {
+async function update_password(userId, oldPassword, newPassword) {
   try {
     const users = client.db('bookingFlight').collection('users');
-    const user = await users.findOne({ username });
+    const user = await users.findOne({ _id : new ObjectId(userId) });
     const passwordMatch = await bcrypt.compare(oldPassword, user.password);
 
     if (!passwordMatch) {
@@ -135,7 +138,8 @@ async function update_password(username, oldPassword, newPassword) {
     }
     const newPasswordHash = await bcrypt.hash(newPassword, saltRounds);
 
-    const filter = { username };
+
+    const filter = {_id : new ObjectId(userId)};
     const update = {
       $set: { password: newPasswordHash },
     };
@@ -151,9 +155,7 @@ async function update_password(username, oldPassword, newPassword) {
 async function fetch_user(userId) {
   try {
     const users = client.db('bookingFlight').collection('users');
-    console.log("fetch user ", userId);
     const user = await users.findOne({ _id: new ObjectId(userId) });
-    console.log("user", user);
     return user;
   } catch (error) {
     console.error('Unable to fetch from database!', error.message);
@@ -165,7 +167,6 @@ async function fetch_userName(username) {
   try {
     const users = client.db('bookingFlight').collection('users');
     const user = await users.findOne({ username: username });
-    console.log("userrrrrr", user);
     return user;
   } catch (error) {
     console.error('Unable to fetch from database!', error.message);
@@ -193,15 +194,12 @@ async function add_event(userId, eventId) {
 
 async function add_ticket(userId, ticketData) {
     try {
-        console.log("ticketData", ticketData);
         const users = client.db('bookingFlight').collection('users');
         
         const updateResult = await users.updateOne(
             { _id: new ObjectId(userId) },
             { $push: { tickets: ticketData } }
         );
-
-        console.log("updatta", updateResult);
         
         return updateResult.modifiedCount > 0;
     } catch (error) {
@@ -222,6 +220,18 @@ async function username_exist(username) {
   }
 }
 
+async function findUserTickets(userId) {
+  try {
+    const users = client.db('bookingFlight').collection('users');
+
+    const user = await users.findOne({ _id: new ObjectId(userId) });
+    return user ? user.tickets : [];
+  } catch (error) {
+    console.error('Error fetching user tickets:', error);
+    throw error;
+  }
+}
+
 init_db().catch(console.dir);
 
-export { validate_user, update_user, fetch_user, username_exist, update_profile, update_image, update_password,add_event, add_ticket};
+export { validate_user, update_user, fetch_user, username_exist, update_profile, update_image, update_password,add_event, add_ticket,findUserTickets};

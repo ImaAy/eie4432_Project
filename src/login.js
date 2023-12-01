@@ -1,3 +1,7 @@
+/* Group members : 
+    Name : Imadath YAYA studentId: 23012992x
+    Name: Kin Fung Yip*/
+
 import express from 'express';
 import multer from 'multer';
 import bcrypt from 'bcrypt';
@@ -13,6 +17,7 @@ import {
   update_password,
   add_event,
   add_ticket,
+  findUserTickets,
 } from './userdb.js';
 
 const route = express.Router();
@@ -175,8 +180,6 @@ route.post('/addEvent/:eventId', async (req, res) => {
         const { eventId } = req.params;
         const { totalPrice, seatNumber } = req.body;
 
-        console.log("Adding event", userId, eventId);
-
         const success = await add_event(userId, eventId,totalPrice);
 
         if (success) {
@@ -195,7 +198,6 @@ route.post('/addEvent/:eventId', async (req, res) => {
 route.post('/updateProfile', upload.array(), async (req, res) => {
   try {
     const { nickname, email, gender, birthdate } = req.body;
-    console.log('update', nickname, email, gender, birthdate);
     const success = await update_profile(req.session.userId, nickname, email, gender, birthdate);
     res.json(success);
   } catch (error) {
@@ -221,13 +223,15 @@ route.post('/changePassword', upload.array(), async (req, res) => {
 
     const success = await update_password(user, oldPassword, newPassword);
     if (!success) {
-      res.json({ success: false, message: 'Incorrect old password' });
+      return res.json({ success: false, message: 'Incorrect old password' });
     }
-    res.json({ success: true, message: 'Password changed successfully.' });
+    return res.json({ success: true, message: 'Password changed successfully.' });
   } catch (error) {
     console.error('Error changing password:', error.message);
+    return res.status(500).json({ success: false, message: 'Internal server error' });
   }
 });
+
 
 route.post('/logout', async (req, res) => {
   try {
@@ -246,7 +250,6 @@ route.post('/add-ticket', async (req, res) => {
     try {
         const ticketData = req.body;
         const userId = req.session.userId;
-        console.log("tickkee", ticketData);
         const ticketAdded = await add_ticket(userId, ticketData);
 
         if (ticketAdded) {
@@ -258,6 +261,19 @@ route.post('/add-ticket', async (req, res) => {
         console.error('Erreur serveur:', error);
         res.status(500).send('Erreur serveur');
     }
+});
+
+route.get('/tickets', async(req, res) => {
+  try {
+    const userId = req.session.userId;
+    if (!userId) {
+      return res.status(401).send('User not authenticated');
+    }
+    const tickets = await findUserTickets(userId);
+    res.json(tickets);
+  } catch (error) {
+    res.status(500).send('Error fetching tickets');
+  }
 });
 
 export default route;

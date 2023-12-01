@@ -1,4 +1,8 @@
-// script.js
+/* Group members : 
+    Name : Imadath YAYA studentId: 23012992x
+    Name: Kin Fung Yip*/
+
+
 document.addEventListener('DOMContentLoaded', function () {
   const eventList = document.getElementById('eventList');
   const searchInput = document.getElementById('searchInput');

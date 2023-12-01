@@ -1,3 +1,7 @@
+/* Group members : 
+    Name : Imadath YAYA studentId: 23012992x
+    Name: Kin Fung Yip*/
+
 async function checkAuthentication() {
   try {
     // Making an API call to /auth/me

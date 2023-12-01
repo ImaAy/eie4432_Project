@@ -1,3 +1,7 @@
+/* Group members : 
+    Name : Imadath YAYA studentId: 23012992x
+    Name: Kin Fung Yip*/
+
 import fs from 'fs/promises';
 import client from './dbclient.js';
 import { ObjectId } from 'mongodb';
@@ -56,6 +60,29 @@ async function add_event(
 ) {
   try {
     const events = client.db('bookingFlight').collection('events');
+    const seatMaps = client.db('bookingFlight').collection('seatMaps');
+    const seatData = [];
+    const totalRows = 10;
+    const seatsPerRow = 6; 
+
+    for (let row = 1; row <= totalRows; row++) {
+      for (let seat = 0; seat < seatsPerRow; seat++) {
+        const seatNumber = `${row}${String.fromCharCode(65 + seat)}`;
+        const seatClass = row <= 3 ? 'premium' : 'economy';
+
+        seatData.push({
+          _id: new ObjectId(),
+          seatNumber,
+          isOccupied: false,
+          price: seatClass === 'premium' ? 150 : 100,
+          class: seatClass,
+          reservedBy: null
+        });
+      }
+    }
+
+    const seatMap = await seatMaps.insertOne({ seats: seatData });
+    const seatMapId = seatMap.insertedId;
     const newEvent = {
       title,
       flightNumber,
@@ -69,7 +96,9 @@ async function add_event(
       airline,
       description,
       coverImage,
+      seatMapId,
     };
+
 
     const result = await events.insertOne(newEvent);
     return result.insertedId;
@@ -142,6 +171,17 @@ async function get_eventList() {
   }
 }
 
+async function get_events(query) {
+    try {
+        const events = client.db('bookingFlight').collection('events');
+        const eventsList = await events.find({ title: new RegExp(query, 'i') }).toArray();
+        return eventsList;
+    } catch (error) {
+        console.error('Erreur lors de la récupération des événements:', error);
+        return null;
+    }
+}
+
 init_event_db().catch(console.dir);
 
-export { add_event, update_event, fetch_event, get_eventList, updateAvTickets };
+export { add_event, update_event, fetch_event, get_eventList, updateAvTickets, get_events };

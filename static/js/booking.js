@@ -1,7 +1,11 @@
+/* Group members : 
+    Name : Imadath YAYA studentId: 23012992x
+    Name: Kin Fung Yip*/
+
 document.addEventListener('DOMContentLoaded', function () {
   var eventId = sessionStorage.getItem('eventId');
+  var seatMapId;
   if (eventId) {
-    console.log(eventId);
     fetch(`/event/details/${eventId}`)
       .then((response) => {
         if (!response.ok) {
@@ -20,15 +24,19 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('eventArrivalDate').textContent = eventDetails.arrivalDate;
         document.getElementById('eventArrivalAirport').textContent = eventDetails.arrivalAirport;
         document.getElementById('flightPrice').textContent = eventDetails.flightPrice;
+
+        fetchSeatsData(eventDetails).then((seatMapDetails) => {
+          seatMapId = seatMapDetails._id;
+          const seats = seatMapDetails.seats;
+          const seatMap = document.getElementById('seatMap');
+          seatMap.innerHTML = createSeatMap(seats);
+          attachEventListeners();
+        });
       })
       .catch((error) => console.error('Error:', error));
   }
 
-  fetchSeatsData().then((seats) => {
-    const seatMap = document.getElementById('seatMap');
-    seatMap.innerHTML = createSeatMap(seats);
-    attachEventListeners();
-  });
+  
 
   document.getElementById('contactForm').addEventListener('submit', function (e) {
     e.preventDefault();
@@ -52,6 +60,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     sessionStorage.setItem('eventId', eventId);
     sessionStorage.setItem('totalPrice', totalPrice);
+    sessionStorage.setItem('seatMapId', seatMapId);
     sessionStorage.setItem('selectedSeat', selectedSeat);
     window.location.href = 'payment.html';
   });
@@ -92,15 +101,16 @@ function handleSeatClick(event) {
   }
 }
 
-function fetchSeatsData() {
-  return fetch('/seats')
+function fetchSeatsData(eventDetails) {
+  return fetch(`/seats/details/${eventDetails.seatMapId}`)
     .then((response) => response.json())
     .catch((error) => console.error('Error fetching seat data:', error));
 }
 
 function updatePrice(seatPrice) {
   const flightPriceElement = document.getElementById('flightPrice');
-  let currentFlightPrice = parseFloat(flightPriceElement.textContent);
+  const eventPriceElement = document.getElementById('eventPrice');
+  let currentFlightPrice = parseFloat(eventPriceElement.textContent);
   if (isNaN(currentFlightPrice)) currentFlightPrice = 0;
   let seatPriceNumber = parseFloat(seatPrice);
   if (isNaN(seatPriceNumber)) {

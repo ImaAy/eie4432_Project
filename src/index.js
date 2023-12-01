@@ -1,3 +1,7 @@
+/* Group members : 
+    Name : Imadath YAYA studentId: 23012992x
+    Name: Kin Fung Yip*/
+
 import express from 'express';
 import session from 'express-session';
 import mongostore from 'connect-mongo';

@@ -1,19 +1,44 @@
 
-
+/* Group members : 
+    Name : Imadath YAYA studentId: 23012992x
+    Name: Kin Fung Yip*/
+    
 var seatsInfo;
-document.addEventListener('DOMContentLoaded', () => {
-  fetchSeatsData().then((seats) => {
-    seatsInfo = seats;
-    createSeatMap(seats, 10, 6);
-    attachEventListeners();
-  });
+var totalCols = 6;
+var totalRows = 10;
+var seatMapId;
 
-  // Correctement déplacé à l'intérieur de DOMContentLoaded
-  window.addEventListener('resize', function() {
-    createSeatMap(seatsInfo, 10, 6);
-    attachEventListeners();
+function searchEvents() {
+  const searchTerm = document.getElementById('eventSearchInput').value;
+
+  fetch(`/event/searchEvents?query=${searchTerm}`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(events => {
+      displaySearchResults(events);
+    })
+    .catch(error => {
+      console.error('Error searching events:', error);
+    });
+}
+
+function displaySearchResults(events) {
+  const resultsElement = document.getElementById('searchResults');
+  resultsElement.innerHTML = '';
+  events.forEach(event => {
+    const listItem = document.createElement('a');
+    listItem.classList.add('list-group-item', 'list-group-item-action');
+    listItem.textContent = event.title;
+    listItem.setAttribute('href', '#');
+    listItem.onclick = function() { selectEvent(event._id); }; 
+    resultsElement.appendChild(listItem);
   });
-});
+}
+
 
 
 
@@ -23,7 +48,7 @@ function fetchSeatsData() {
     .catch((error) => console.error('Error fetching seat data:', error));
 }
 
-function createSeatMap(seats, totalRows, totalCols) {
+function createSeatMap(seatMapId, seats, totalRows, totalCols) {
   const { seatSize, spaceBetweenSeats, aisleWidth } = adjustSeatSizeAndSpacing(window.innerWidth, totalRows, totalCols);
   let svgContent = '';
   seats.forEach((seat) => {
@@ -45,6 +70,7 @@ function createSeatMap(seats, totalRows, totalCols) {
   const seatMap = document.getElementById('seatMap');
   seatMap.setAttribute('viewBox', `0 0 ${svgViewBoxWidth} ${svgViewBoxHeight}`);
   seatMap.innerHTML = svgContent;
+  attachEventListeners(seatMapId);
 }
 
 
@@ -86,13 +112,52 @@ function getSeatPosition(seatNumber, totalRows, totalCols, seatSize, spaceBetwee
   return [xOffset + x, yOffset + y];
 }
 
-function attachEventListeners() {
+function selectEvent(eventId) {
+  // Efface les résultats de recherche existants
+  document.getElementById('searchResults').innerHTML = '';
+
+  fetch(`/event/details/${eventId}`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(eventDetails => {
+      seatMapId=eventDetails.seatMapId;
+      const eventTitleElement = document.getElementById('eventTitle');
+      eventTitleElement.innerHTML = '<h2><strong>' + eventDetails.title + '</strong></h2>';
+      return fetch(`/seats/details/${eventDetails.seatMapId}`);
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(seatMapDetails => {
+      const { seats} = seatMapDetails;
+      console.log("seat",seats);
+      createSeatMap(seatMapId,seats, totalRows, totalCols);
+    })
+    .catch(error => {
+      console.error('Error fetching seat map:', error);
+    });
+}
+
+
+
+function attachEventListeners(seatMapId) {
   const tooltip = document.getElementById('seatInfoTooltip');
 
   document.querySelectorAll('.seat').forEach((seat) => {
     seat.addEventListener('mouseover', (event) => {
       const seatNum = event.currentTarget.id;
-      fetch(`/seats/seat-info/${seatNum}`)
+      const url = new URL(window.location.origin + '/seats/seat-info');
+      url.searchParams.append('seatNum', seatNum);
+      url.searchParams.append('seatMapId', seatMapId);
+
+      fetch(url)
         .then((response) => {
           if (!response.ok) {
             throw new Error('Network response was not ok');
@@ -131,3 +196,9 @@ function attachEventListeners() {
     });
   });
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+  /*fetchSeatsData().then(seatsData => {
+    createSeatMap(seatsData, totalRows, totalCols);
+  });*/
+});

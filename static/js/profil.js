@@ -1,3 +1,7 @@
+/* Group members : 
+    Name : Imadath YAYA studentId: 23012992x
+    Name: Kin Fung Yip*/
+
 document.addEventListener('DOMContentLoaded', function () {
   const formFields = document.querySelectorAll('#profileForm input, #profileForm select');
   formFields.forEach((field) => {

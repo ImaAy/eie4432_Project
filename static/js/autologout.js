@@ -1,6 +1,10 @@
+/* Group members : 
+    Name : Imadath YAYA studentId: 23012992x
+    Name: Kin Fung Yip*/
+
 let idleTime = 0;
 const idleInterval = setInterval(timerIncrement, 1000);
-const IDLE_LIMIT = 15 * 60; // 15 min
+const IDLE_LIMIT = 2 * 60;
 
 window.onload = resetTimer;
 document.onmousemove = resetTimer;

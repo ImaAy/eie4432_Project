@@ -1,12 +1,16 @@
+/* Group members : 
+    Name : Imadath YAYA studentId: 23012992x
+    Name: Kin Fung Yip*/
 var eventTitle;
 var eventId;
 var totalPrice;
 var selectedSeat;
+var seatMapId;
 document.addEventListener('DOMContentLoaded', function () {
   eventId = sessionStorage.getItem('eventId');
   totalPrice = sessionStorage.getItem('totalPrice');
   selectedSeat = sessionStorage.getItem('selectedSeat');
-  console.log('seatSession  ', selectedSeat);
+  seatMapId = sessionStorage.getItem('seatMapId');
   if (eventId) {
     fetch(`/event/details/${eventId}`)
       .then((response) => {
@@ -36,6 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('payment-form').addEventListener('submit', function (event) {
     event.preventDefault();
     var formData = new FormData();
+    formData.append('seatMapId', seatMapId);
     formData.append('selectedSeat', selectedSeat);
     fetch('/seats/updateStatut', {
       method: 'POST',
@@ -49,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
       })
       .then((data) => {
-        console.log('Success:', data);
+        console.log('Success1111:', data);
       })
       .catch((error) => {
         console.error('Error:', error);
@@ -146,7 +151,6 @@ function displayElectronicTicket() {
 }
 
 function saveTicketToDatabase(ticketData) {
-  console.log("rrrr", ticketData);
   fetch('/auth/add-ticket', {
     method: 'POST',
     headers: {

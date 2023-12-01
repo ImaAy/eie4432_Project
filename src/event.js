@@ -1,9 +1,14 @@
+/* Group members : 
+    Name : Imadath YAYA studentId: 23012992x
+    Name: Kin Fung Yip*/
+
 import express from 'express';
 import multer from 'multer';
 
-import { add_event, update_event, fetch_event, get_eventList, updateAvTickets } from './eventdb.js';
+import { add_event, update_event, fetch_event, get_eventList, updateAvTickets, get_events } from './eventdb.js';
 
 const route = express.Router();
+route.use(express.json())
 const storage = multer.diskStorage({
   destination: './upload/Images',
   filename: function (req, file, cb) {
@@ -21,6 +26,22 @@ route.get('/', async (req, res) => {
     console.error('Unable to fetch events:', error.message);
     res.status(500).json({ message: 'Error fetching events' });
   }
+});
+
+route.get('/searchEvents', async (req, res) => {
+    try {
+        const query = req.query.query;
+        const events = await get_events(query);
+
+        if (!events) {
+            res.status(500).send('Erreur lors de la récupération des événements');
+        } else {
+            res.json(events);
+        }
+    } catch (error) {
+        console.error('Erreur serveur:', error);
+        res.status(500).send('Erreur serveur');
+    }
 });
 
 route.get('/details/:eventId', async (req, res) => {
