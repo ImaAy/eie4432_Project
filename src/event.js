@@ -10,7 +10,7 @@ import { add_event, update_event, fetch_event, get_eventList, updateAvTickets, g
 const route = express.Router();
 route.use(express.json())
 const storage = multer.diskStorage({
-  destination: '/tmp/upload/Images',
+  destination: './tmp/upload/Images',
   filename: function (req, file, cb) {
     cb(null, Date.now() + '-' + file.originalname);
   },
