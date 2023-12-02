@@ -24,7 +24,7 @@ const route = express.Router();
 route.use(express.json())
 const form = multer();
 const storage = multer.diskStorage({
-  destination: './tmp/upload/Images',
+  destination: '/tmp/upload/Images',
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
     cb(null, Date.now() + '-' + file.originalname);
