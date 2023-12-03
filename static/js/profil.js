@@ -111,12 +111,12 @@ document.addEventListener('DOMContentLoaded', function () {
       })
       .then((data) => {
         if (data.success) {
-          alert('Mot de passe changé avec succès !');
+          alert('Password changed with success !');
           profileForm.style.display = 'block';
           passwordForm.style.display = 'none';
           changePasswordBtn.style.display = 'block';
         } else {
-          alert('Échec du changement de mot de passe.');
+          alert('Error during the changement of the password!Try again');
         }
       })
       .catch((error) => {
